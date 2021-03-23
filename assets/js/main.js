@@ -11,23 +11,21 @@ const questions = [
   },
 ];
 
-const startButton = document.getElementById("start-button");
-const quizContainer = document.getElementById("quiz-container");
+const startButton = $("#start-button");
+const quizContainer = $("#quiz-container");
 
 let index = 0;
 
 const createChoices = (choices) => {
-  const parentDiv = document.createElement("div");
+  const parentDiv = $("<div>");
 
   const createChoiceAndAppend = (choice) => {
-    const div = document.createElement("div");
-    const button = document.createElement("button");
-    button.setAttribute("data-answer", choice);
-    button.textContent = choice;
+    const div = $("<div>");
+    const button = $("<button>").attr("data-answer", choice).text(choice);
 
-    div.appendChild(button);
+    div.append(button);
 
-    parentDiv.appendChild(div);
+    parentDiv.append(div);
   };
 
   choices.forEach(createChoiceAndAppend);
@@ -45,7 +43,7 @@ const verifyChoice = (event) => {
 
     if (answer === correctAnswer) {
       index += 1;
-      quizContainer.removeChild(document.getElementById("question"));
+      $("#question").remove();
       renderQuestion();
     } else {
       alert("BOO");
@@ -54,18 +52,17 @@ const verifyChoice = (event) => {
 };
 
 const createQuestion = (question) => {
-  const divContainer = document.createElement("div");
-  divContainer.setAttribute("id", "question");
-  divContainer.setAttribute("data-answer", question.correctAnswer);
+  const divContainer = $("<div>")
+    .attr("id", "question")
+    .attr("data-answer", question.correctAnswer);
 
-  const h2 = document.createElement("h2");
-  h2.textContent = question.title;
+  const h2 = $("<h2>").text(question.title);
 
   const choices = createChoices(question.choices);
 
   divContainer.append(h2, choices);
 
-  divContainer.addEventListener("click", verifyChoice);
+  divContainer.on("click", verifyChoice);
 
   return divContainer;
 };
@@ -76,7 +73,7 @@ const renderQuestion = () => {
     const questionContainer = createQuestion(questions[index]);
 
     // append question container to the DOM
-    quizContainer.appendChild(questionContainer);
+    quizContainer.append(questionContainer);
   } else {
     alert("DONE");
   }
@@ -84,10 +81,11 @@ const renderQuestion = () => {
 
 const startQuiz = () => {
   // remove the start button container
-  const startContainer = document.getElementById("start-container");
-  quizContainer.removeChild(startContainer);
+  const startContainer = $("#start-container");
+  startContainer.remove();
+  // quizContainer.removeChild(startContainer);
 
   renderQuestion();
 };
 
-startButton.addEventListener("click", startQuiz);
+startButton.on("click", startQuiz);
