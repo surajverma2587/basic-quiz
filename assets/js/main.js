@@ -20,12 +20,11 @@ const createChoices = (choices) => {
   const parentDiv = $("<div>");
 
   const createChoiceAndAppend = (choice) => {
-    const div = $("<div>");
-    const button = $("<button>").attr("data-answer", choice).text(choice);
-
-    div.append(button);
-
-    parentDiv.append(div);
+    const choiceComponent = `<div>
+      <button data-answer="${choice}">${choice}</button>
+    </div>
+    `;
+    parentDiv.append(choiceComponent);
   };
 
   choices.forEach(createChoiceAndAppend);
@@ -56,11 +55,9 @@ const createQuestion = (question) => {
     .attr("id", "question")
     .attr("data-answer", question.correctAnswer);
 
-  const h2 = $("<h2>").text(question.title);
-
   const choices = createChoices(question.choices);
 
-  divContainer.append(h2, choices);
+  divContainer.append(`<h2>${question.title}</h2>`, choices);
 
   divContainer.on("click", verifyChoice);
 
